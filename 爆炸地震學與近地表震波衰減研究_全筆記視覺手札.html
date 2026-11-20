@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爆炸地震學與近地表震波衰減研究｜地球物理手札</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Noto Serif TC"', 'serif'],
+                        wenkai: ['"LXGW WenKai TC"', '"Noto Serif TC"', 'serif'],
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        mono: ['"IBM Plex Mono"', 'monospace'],
+                    },
+                    colors: {
+                        paper: '#F7F4EE',
+                        card: '#FDFBF7',
+                        cardhover: '#F2EDE4',
+                        ink: '#222120',
+                        muted: '#5E5A54',
+                        sage: '#4A6356',
+                        terracotta: '#9E5840',
+                        slate: '#3D5666',
+                        sandgold: '#9E7E43',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F7F4EE;
+            color: #222120;
+            background-image: radial-gradient(rgba(34, 33, 32, 0.045) 1px, transparent 0);
+            background-size: 20px 20px;
+        }
+        .editorial-card {
+            background-color: #FDFBF7;
+            border: 1px solid #DFD9CE;
+            box-shadow: 0 3px 16px -4px rgba(34, 33, 32, 0.05);
+        }
+        .editorial-inset {
+            background-color: #F4EFE6;
+            border: 1px solid #E3DDD2;
+        }
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #9E5840;
+            cursor: pointer;
+            margin-top: -6px;
+            border: 2px solid #FDFBF7;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #D8D0C3;
+            border-radius: 2px;
+        }
+        .stage-arrow {
+            position: relative;
+        }
+        .story-line {
+            position: relative;
+            padding-left: 1.75rem;
+            border-left: 2px solid #D8D0C3;
+        }
+        @media (min-width: 640px) {
+            .story-line {
+                padding-left: 2.5rem;
+            }
+        }
+        .story-dot {
+            position: absolute;
+            left: -0.5625rem;
+            top: 0.25rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 9999px;
+            border: 3px solid #F7F4EE;
+        }
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased leading-relaxed selection:bg-terracotta/20">
+
+    <!-- 頂部導覽列（五步單線工作流） -->
+    <nav class="sticky top-0 z-50 bg-paper/95 backdrop-blur-md border-b border-[#DFD9CE]">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-terracotta"></span>
+                <span class="font-serif font-bold text-sm sm:text-base tracking-wide text-ink">爆炸地震學與近地表震波衰減手札</span>
+            </div>
+            <div class="flex items-center gap-1 sm:gap-2 text-[11px] sm:text-xs font-medium text-muted">
+                <a href="#step1" class="px-2 py-1 rounded hover:bg-cardhover hover:text-ink transition-colors">1. 拆解波形</a>
+                <span>&rarr;</span>
+                <a href="#step2" class="px-2 py-1 rounded hover:bg-cardhover hover:text-ink transition-colors">2. 辨識真偽</a>
+                <span>&rarr;</span>
+                <a href="#step3" class="px-2 py-1 rounded hover:bg-cardhover hover:text-ink transition-colors">3. 清洗數據</a>
+                <span>&rarr;</span>
+                <a href="#step4" class="px-2 py-1 rounded hover:bg-cardhover hover:text-ink transition-colors">4. 換算規模</a>
+                <span>&rarr;</span>
+                <a href="#step5" class="px-2 py-1 rounded hover:bg-cardhover hover:text-ink transition-colors">5. 結論心得</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 刊物封面與單線故事總覽 -->
+    <header class="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-8 border-b border-[#DFD9CE]">
+        <div class="space-y-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-[#DFD9CE] text-xs font-mono text-muted">
+                <span>FORENSIC SEISMOLOGY &amp; NEAR-SURFACE ATTENUATION</span>
+            </div>
+            <h1 class="font-serif text-2xl sm:text-4xl font-black tracking-tight text-ink leading-snug">
+                地底的聲音偵探：從波形拆解到高雄氣爆規模推估
+            </h1>
+            <p class="font-wenkai text-base sm:text-lg text-muted">
+                當地下發生一場沒有目擊者的神秘震動，地球物理學家如何沿著一條嚴謹的推理主線，一步步揭開真相？
+            </p>
+        </div>
+
+        <!-- 單線推理路徑圖 -->
+        <div class="mt-6 bg-card border border-[#DFD9CE] rounded-2xl p-4 sm:p-5">
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+                <a href="#step1" class="p-3 rounded-xl bg-paper hover:bg-cardhover transition-colors border border-[#E3DDD2]">
+                    <div class="font-mono font-bold text-slate">STEP 01｜訊號分離</div>
+                    <div class="font-serif font-bold text-sm text-ink mt-1">把混亂波形拆乾淨</div>
+                    <div class="text-muted mt-1">將原始紀錄旋轉為 Z・R・T 三軸，分離壓縮波與剪力波。</div>
+                </a>
+                <a href="#step2" class="p-3 rounded-xl bg-paper hover:bg-cardhover transition-colors border border-[#E3DDD2]">
+                    <div class="font-mono font-bold text-terracotta">STEP 02｜定性鑑識</div>
+                    <div class="font-serif font-bold text-sm text-ink mt-1">是天然地震還是爆炸？</div>
+                    <div class="text-muted mt-1">用海灘球、L<sub>g</sub> 地殼導波與高頻 P<sub>g</sub>/L<sub>g</sub> 頻譜比抓出人為爆炸。</div>
+                </a>
+                <a href="#step3" class="p-3 rounded-xl bg-paper hover:bg-cardhover transition-colors border border-[#E3DDD2]">
+                    <div class="font-mono font-bold text-sandgold">STEP 03｜數據清洗</div>
+                    <div class="font-serif font-bold text-sm text-ink mt-1">還原真實地面振動</div>
+                    <div class="text-muted mt-1">扣除儀器響應 I(ω)、檢驗 SNR 並高斯濾波，量出準確 PGV。</div>
+                </a>
+                <a href="#step4" class="p-3 rounded-xl bg-paper hover:bg-cardhover transition-colors border border-[#E3DDD2]">
+                    <div class="font-mono font-bold text-sage">STEP 04｜定量評估</div>
+                    <div class="font-serif font-bold text-sm text-ink mt-1">爆炸威力到底有多大？</div>
+                    <div class="text-muted mt-1">將真實 PGV 代入 TAIGER 近地表衰減式，反推高雄氣爆規模 M<sub>L</sub> = 2.38。</div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-14">
+
+        <!-- ==================== STEP 01: 訊號接收與三分量拆解 ==================== -->
+        <section id="step1" class="story-line space-y-6">
+            <span class="story-dot bg-slate"></span>
+            <div class="space-y-1">
+                <div class="font-mono text-xs text-slate font-bold">STEP 01｜線索起點：接收跨介質訊號，並用 Z・R・T 三軸分離波型</div>
+                <h2 class="font-serif text-xl sm:text-2xl font-bold text-ink">第一步：先把地震儀收到的混雜波動「拆解成三個正交方向」</h2>
+                <p class="text-xs sm:text-sm text-muted">
+                    法醫地震學透過<strong>地震儀（Seismogram）、次聲波／紅外線聲波（Infrasound / Acoustogram）、水聲感測器（Hydroacoustic）與衛星訊號</strong>，監測地下核試爆、礦場爆破、礦坑坍陷與岩爆（Mine collapse &amp; rock bursts）、火山活動、大氣爆炸、機械振動及恐怖攻擊。在判斷事件性質前，必須先認識兩種基本體波，並把波形轉到 <strong>Z・R・T 座標系</strong>。
+                </p>
+            </div>
+
+            <!-- P波 vs S波 精簡雙欄對照 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="editorial-card p-4 sm:p-5 rounded-2xl space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-serif font-bold text-base text-terracotta">P 波（縱波 / 壓縮波）</span>
+                        <span class="font-mono text-xs px-2 py-0.5 rounded bg-terracotta/10 text-terracotta font-semibold">約 6.5 km/s</span>
+                    </div>
+                    <p class="text-xs text-muted">質點運動方向與波行進方向<strong>相同（平行）</strong>，造成岩石前後「壓縮 ⇄ 伸張」。波速最快，最先抵達測站。</p>
+                    <svg viewBox="0 0 360 66" class="w-full h-14 bg-paper rounded-xl border border-[#DFD9CE]">
+                        <line x1="20" y1="22" x2="105" y2="22" stroke="#9E5840" stroke-width="1.5" marker-end="url(#arrow-p)"/>
+                        <text x="112" y="25" font-size="9.5" fill="#9E5840" font-family="sans-serif">波行進方向（疏密交替）</text>
+                        <g stroke="#222120" stroke-width="1.5">
+                            <line x1="25" y1="36" x2="25" y2="56"/><line x1="30" y1="36" x2="30" y2="56"/><line x1="35" y1="36" x2="35" y2="56"/>
+                            <line x1="55" y1="36" x2="55" y2="56"/><line x1="78" y1="36" x2="78" y2="56"/><line x1="100" y1="36" x2="100" y2="56"/>
+                            <line x1="120" y1="36" x2="120" y2="56"/><line x1="125" y1="36" x2="125" y2="56"/><line x1="130" y1="36" x2="130" y2="56"/>
+                            <line x1="155" y1="36" x2="155" y2="56"/><line x1="180" y1="36" x2="180" y2="56"/><line x1="205" y1="36" x2="205" y2="56"/>
+                            <line x1="225" y1="36" x2="225" y2="56"/><line x1="230" y1="36" x2="230" y2="56"/><line x1="235" y1="36" x2="235" y2="56"/>
+                            <line x1="260" y1="36" x2="260" y2="56"/><line x1="288" y1="36" x2="288" y2="56"/><line x1="315" y1="36" x2="315" y2="56"/>
+                        </g>
+                        <defs><marker id="arrow-p" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9E5840"/></marker></defs>
+                    </svg>
+                </div>
+
+                <div class="editorial-card p-4 sm:p-5 rounded-2xl space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-serif font-bold text-base text-slate">S 波（橫波 / 剪切波）</span>
+                        <span class="font-mono text-xs px-2 py-0.5 rounded bg-slate/10 text-slate font-semibold">約 4.0 km/s</span>
+                    </div>
+                    <p class="text-xs text-muted">質點運動方向與波行進方向<strong>垂直</strong>，需要岩石發生<strong>錯動、扭轉或摩擦（剪力）</strong>才能激發。</p>
+                    <svg viewBox="0 0 360 66" class="w-full h-14 bg-paper rounded-xl border border-[#DFD9CE]">
+                        <line x1="20" y1="40" x2="340" y2="40" stroke="#B8B0A2" stroke-width="1" stroke-dasharray="3,3"/>
+                        <path d="M 20 40 Q 55 14, 90 40 T 160 40 T 230 40 T 300 40 T 340 40" fill="none" stroke="#3D5666" stroke-width="2.2"/>
+                        <line x1="55" y1="18" x2="195" y2="18" stroke="#9E5840" stroke-width="1"/>
+                        <text x="125" y="14" text-anchor="middle" font-size="9" fill="#9E5840" font-family="serif">波長 λ</text>
+                        <line x1="265" y1="27" x2="265" y2="53" stroke="#4A6356" stroke-width="1.2"/>
+                        <text x="271" y="52" font-size="8.5" fill="#4A6356" font-family="serif">兩倍振幅</text>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Z / R / T 三分量空間座標系統 -->
+            <div class="editorial-card p-5 rounded-2xl space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#DFD9CE] pb-3">
+                    <div>
+                        <h3 class="font-serif text-base font-bold text-ink">三個方向的定義與主要地震波型（Z・R・T 三分量系統）</h3>
+                        <p class="text-xs text-muted">將測站旋轉至「震央 &rarr; 測站」連線座標後，壓縮波（P）與水平剪力波（SH/Love）就會自動分家：</p>
+                    </div>
+                    <div class="flex gap-1.5 text-xs font-mono">
+                        <button onclick="selectAxis('Z')" id="btn-axis-Z" class="px-2.5 py-1 rounded-lg bg-terracotta text-white font-semibold">Z 垂直向</button>
+                        <button onclick="selectAxis('R')" id="btn-axis-R" class="px-2.5 py-1 rounded-lg bg-paper border border-[#DFD9CE] text-ink">R 徑向</button>
+                        <button onclick="selectAxis('T')" id="btn-axis-T" class="px-2.5 py-1 rounded-lg bg-paper border border-[#DFD9CE] text-ink">T 切向</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+                    <div class="lg:col-span-6 bg-paper rounded-xl border border-[#DFD9CE] p-3">
+                        <svg viewBox="0 0 420 220" class="w-full h-auto">
+                            <polygon points="30,160 180,100 390,140 240,205" fill="#EFEAE0" stroke="#C8C0B2" stroke-width="1.2"/>
+                            <text x="58" y="163" font-size="10" fill="#7A746B" font-family="serif">地表水平面</text>
+                            <circle cx="125" cy="150" r="7" fill="#9E5840"/>
+                            <circle cx="125" cy="150" r="14" fill="none" stroke="#9E5840" stroke-width="1" stroke-dasharray="3,2"/>
+                            <text x="105" y="177" font-size="11" font-weight="bold" fill="#9E5840" font-family="serif">震央 (Source)</text>
+                            <line x1="125" y1="150" x2="275" y2="140" stroke="#5E5A54" stroke-width="1.8" stroke-dasharray="5,3"/>
+                            <text x="198" y="133" text-anchor="middle" font-size="10" fill="#5E5A54" font-family="serif">震央 &rarr; 測站連線方向</text>
+                            <polygon points="275,132 268,144 282,144" fill="#222120"/>
+                            <text x="275" y="160" text-anchor="middle" font-size="11" font-weight="bold" fill="#222120" font-family="serif">測站</text>
+
+                            <g id="svg-axis-Z" opacity="1">
+                                <line x1="275" y1="140" x2="275" y2="40" stroke="#9E5840" stroke-width="3" marker-end="url(#arrow-z)"/>
+                                <line x1="275" y1="140" x2="275" y2="190" stroke="#9E5840" stroke-width="1.8" stroke-dasharray="3,2"/>
+                                <rect x="284" y="38" width="110" height="34" rx="6" fill="#9E5840" fill-opacity="0.12" stroke="#9E5840"/>
+                                <text x="292" y="53" font-size="11" font-weight="bold" fill="#9E5840" font-family="mono">Z 垂直向 (Vertical)</text>
+                                <text x="292" y="66" font-size="9.5" fill="#222120" font-family="serif">垂直地表上下振動</text>
+                            </g>
+
+                            <g id="svg-axis-R" opacity="0.85">
+                                <line x1="275" y1="140" x2="365" y2="134" stroke="#4A6356" stroke-width="3" marker-end="url(#arrow-r)"/>
+                                <rect x="305" y="92" width="106" height="34" rx="6" fill="#4A6356" fill-opacity="0.12" stroke="#4A6356"/>
+                                <text x="312" y="107" font-size="11" font-weight="bold" fill="#4A6356" font-family="mono">R 徑向 (Radial)</text>
+                                <text x="312" y="120" font-size="9.5" fill="#222120" font-family="serif">沿連線水平前後推拉</text>
+                            </g>
+
+                            <g id="svg-axis-T" opacity="0.85">
+                                <line x1="275" y1="140" x2="235" y2="190" stroke="#3D5666" stroke-width="3" marker-end="url(#arrow-t)"/>
+                                <line x1="275" y1="140" x2="305" y2="103" stroke="#3D5666" stroke-width="1.5" stroke-dasharray="3,2"/>
+                                <rect x="115" y="182" width="114" height="34" rx="6" fill="#3D5666" fill-opacity="0.12" stroke="#3D5666"/>
+                                <text x="122" y="197" font-size="11" font-weight="bold" fill="#3D5666" font-family="mono">T 切向 (Tangential)</text>
+                                <text x="122" y="210" font-size="9.5" fill="#222120" font-family="serif">水平垂直連線左右搖晃</text>
+                            </g>
+
+                            <defs>
+                                <marker id="arrow-z" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9E5840"/></marker>
+                                <marker id="arrow-r" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#4A6356"/></marker>
+                                <marker id="arrow-t" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3D5666"/></marker>
+                            </defs>
+                        </svg>
+                    </div>
+
+                    <div class="lg:col-span-6 space-y-2.5">
+                        <div class="overflow-x-auto rounded-xl border border-[#DFD9CE]">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-paper border-b border-[#DFD9CE] font-serif text-ink">
+                                        <th class="p-2">分量</th>
+                                        <th class="p-2">代號</th>
+                                        <th class="p-2">方向定義</th>
+                                        <th class="p-2">主要記錄波型</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-[#DFD9CE]">
+                                    <tr id="row-axis-Z" class="bg-terracotta/5">
+                                        <td class="p-2 font-bold text-terracotta">垂直向</td>
+                                        <td class="p-2 font-mono font-bold">Z</td>
+                                        <td class="p-2 text-muted">垂直地表（上下）</td>
+                                        <td class="p-2 font-medium">P 波、SV 波、雷利波</td>
+                                    </tr>
+                                    <tr id="row-axis-R">
+                                        <td class="p-2 font-bold text-sage">徑向</td>
+                                        <td class="p-2 font-mono font-bold">R</td>
+                                        <td class="p-2 text-muted">沿震央到測站連線（前後推拉）</td>
+                                        <td class="p-2 font-medium">P 波、SV 波、雷利波</td>
+                                    </tr>
+                                    <tr id="row-axis-T">
+                                        <td class="p-2 font-bold text-slate">切向</td>
+                                        <td class="p-2 font-mono font-bold">T</td>
+                                        <td class="p-2 text-muted">水平垂直連線（左右搖晃）</td>
+                                        <td class="p-2 font-medium">SH 波、洛夫波</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="axis-insight-box" class="editorial-inset p-3 rounded-xl text-xs text-ink">
+                            <span class="font-bold text-terracotta">銜接下一步：</span>把波型分進 Z・R・T 三軸後，我們就能直接比較「壓縮波（Z/R）」與「剪力波（T）」的強弱，進入第二步分辨天然地震與人為爆炸！
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== STEP 02: 定性鑑識（天然地震 vs. 地下核試爆） ==================== -->
+        <section id="step2" class="story-line space-y-6">
+            <span class="story-dot bg-terracotta"></span>
+            <div class="space-y-1">
+                <div class="font-mono text-xs text-terracotta font-bold">STEP 02｜核心鑑識：抓出震源機制與波型差異（Kim, 2017 五大判準）</div>
+                <h2 class="font-serif text-xl sm:text-2xl font-bold text-ink">第二步：如何判定這起事件是「天然地震」還是「地下核試爆」？</h2>
+                <p class="text-xs sm:text-sm text-muted">
+                    天然地震是斷層面的<strong>雙力偶錯動（DC，4個力平衡不旋轉）</strong>，產生強烈剪力波；而地下核試爆如同氣球在地下瞬間膨脹，屬於<strong>各向同性純體積壓縮（ISO）</strong>，幾乎不直接激發 S 波與表面波。透過以下兩大關鍵工具即可一舉破案：
+                </p>
+            </div>
+
+            <!-- 工具 A：海灘球震源機制 -->
+            <div class="editorial-card p-5 rounded-2xl space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h3 class="font-serif text-base font-bold text-ink">鑑識工具 A：海灘球（Beachball）下半球投影與矩張量反演</h3>
+                    <span class="font-mono text-[11px] px-2.5 py-0.5 rounded bg-paper border border-[#DFD9CE] text-muted">Kim (2017)：(A) m<sub>b</sub>/M<sub>s</sub>・(C) 深度・(D) Modeling・(E) 初動極性</span>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                    <div class="p-3 rounded-xl bg-paper border border-[#DFD9CE] flex flex-col items-center space-y-1.5">
+                        <svg viewBox="0 0 120 120" class="w-20 h-20">
+                            <defs><clipPath id="clip-ball-1"><circle cx="60" cy="60" r="46"/></clipPath></defs>
+                            <circle cx="60" cy="60" r="46" fill="#F9F7F3"/>
+                            <g clip-path="url(#clip-ball-1)">
+                                <path d="M 10 10 L 44 10 Q 56 60 44 110 L 10 110 Z" fill="#222120"/>
+                                <path d="M 110 10 L 76 10 Q 64 60 76 110 L 110 110 Z" fill="#222120"/>
+                                <path d="M 44 10 Q 56 60 44 110" fill="none" stroke="#222120" stroke-width="1.5"/>
+                                <path d="M 76 10 Q 64 60 76 110" fill="none" stroke="#222120" stroke-width="1.5"/>
+                                <line x1="56" y1="60" x2="36" y2="60" stroke="#9E5840" stroke-width="2" marker-end="url(#arrow-z)"/>
+                                <line x1="64" y1="60" x2="84" y2="60" stroke="#9E5840" stroke-width="2" marker-end="url(#arrow-z)"/>
+                            </g>
+                            <circle cx="60" cy="60" r="46" fill="none" stroke="#222120" stroke-width="2"/>
+                        </svg>
+                        <div class="font-serif font-bold text-xs text-ink">正斷層（Normal）</div>
+                        <p class="text-[11px] text-muted">中間白、兩側黑（水平拉張）</p>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-paper border border-[#DFD9CE] flex flex-col items-center space-y-1.5">
+                        <svg viewBox="0 0 120 120" class="w-20 h-20">
+                            <defs><clipPath id="clip-ball-2"><circle cx="60" cy="60" r="46"/></clipPath></defs>
+                            <circle cx="60" cy="60" r="46" fill="#F9F7F3"/>
+                            <g clip-path="url(#clip-ball-2)">
+                                <path d="M 44 10 Q 56 60 44 110 L 76 110 Q 64 60 76 10 Z" fill="#222120" stroke="#222120" stroke-width="1.5"/>
+                                <line x1="20" y1="60" x2="40" y2="60" stroke="#9E5840" stroke-width="2" marker-end="url(#arrow-z)"/>
+                                <line x1="100" y1="60" x2="80" y2="60" stroke="#9E5840" stroke-width="2" marker-end="url(#arrow-z)"/>
+                            </g>
+                            <circle cx="60" cy="60" r="46" fill="none" stroke="#222120" stroke-width="2"/>
+                        </svg>
+                        <div class="font-serif font-bold text-xs text-ink">逆斷層（Reverse）</div>
+                        <p class="text-[11px] text-muted">中間黑、兩側白（水平擠壓）</p>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-paper border border-[#DFD9CE] flex flex-col items-center space-y-1.5">
+                        <svg viewBox="0 0 120 120" class="w-20 h-20">
+                            <defs><clipPath id="clip-ball-3"><circle cx="60" cy="60" r="46"/></clipPath></defs>
+                            <circle cx="60" cy="60" r="46" fill="#F9F7F3"/>
+                            <g clip-path="url(#clip-ball-3)">
+                                <path d="M 60 60 L 42 5 L 115 42 Z" fill="#222120"/>
+                                <path d="M 60 60 L 78 115 L 5 78 Z" fill="#222120"/>
+                                <line x1="42" y1="5" x2="78" y2="115" stroke="#222120" stroke-width="1.6"/>
+                                <line x1="5" y1="78" x2="115" y2="42" stroke="#222120" stroke-width="1.6"/>
+                            </g>
+                            <circle cx="60" cy="60" r="46" fill="none" stroke="#222120" stroke-width="2"/>
+                        </svg>
+                        <div class="font-serif font-bold text-xs text-ink">走向斷層（Strike-Slip）</div>
+                        <p class="text-[11px] text-muted">黑白四象限相間（水平錯動）</p>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-paper border border-terracotta/40 flex flex-col items-center space-y-1.5">
+                        <svg viewBox="0 0 120 120" class="w-20 h-20">
+                            <circle cx="60" cy="60" r="46" fill="#9E5840" stroke="#222120" stroke-width="2"/>
+                            <ellipse cx="60" cy="60" rx="46" ry="16" fill="none" stroke="#FFFFFF" stroke-width="0.8" stroke-dasharray="2,2" opacity="0.55"/>
+                            <ellipse cx="60" cy="60" rx="16" ry="46" fill="none" stroke="#FFFFFF" stroke-width="0.8" stroke-dasharray="2,2" opacity="0.55"/>
+                            <text x="60" y="64" text-anchor="middle" font-size="11" font-weight="bold" fill="#FFFFFF" font-family="serif">全壓縮 (+)</text>
+                        </svg>
+                        <div class="font-serif font-bold text-xs text-terracotta">地下核試爆（ISO）</div>
+                        <p class="text-[11px] text-muted">整顆球面全塗色（純體積膨脹）</p>
+                    </div>
+                </div>
+
+                <!-- 收納式補充細節：保持主線清爽，點開可看 2017 北韓核試反演數據與表面波弱原因 -->
+                <details class="editorial-inset rounded-xl p-3.5 text-xs group">
+                    <summary class="font-serif font-bold text-ink cursor-pointer flex items-center justify-between">
+                        <span>展開檢視：2017/09/03 北韓核試矩張量反演數據（ISO 42%）＆ 為什麼表面波較弱？</span>
+                        <span class="font-mono text-terracotta group-open:rotate-180 transition-transform">&#9662;</span>
+                    </summary>
+                    <div class="pt-3 mt-2.5 border-t border-[#DFD9CE] grid grid-cols-1 md:grid-cols-2 gap-3 text-muted">
+                        <div>
+                            <strong class="text-ink">2017/09/03 北韓核試（UC Berkeley 反演，深度 1 km，m<sub>b</sub> 6.3 / M<sub>w</sub> 5.23）：</strong><br>
+                            聯合 BJT、HIA、MDJ、INCN 長週期波形（0.02–0.05 Hz）與 34 個遠震 P 波初動極性，反演出 <strong>ISO（各向同性爆炸成分）高達 42%</strong>、DC 雙力偶 34%、CLVD 24%，遠離純天然地震線。
+                        </div>
+                        <div>
+                            <strong class="text-terracotta">為什麼核試爆的表面波（Love &amp; Rayleigh wave）較弱？</strong><br>
+                            洛夫波由水平剪力波干涉形成，雷利波亦高度依賴 S 波與地表耦合。核爆缺乏斷層錯動剪力、原始 S 波極弱，連帶導致表面波振幅偏小（這也是 m<sub>b</sub> vs. M<sub>s</sub> 判別法的物理基礎）。
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 工具 B：L_g 地殼導波與 P_g/L_g 高頻頻譜比 -->
+            <div class="editorial-card p-5 rounded-2xl space-y-4">
+                <div class="space-y-1">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 class="font-serif text-base font-bold text-ink">鑑識工具 B：大陸地殼導波（L<sub>g</sub>）與高頻 P<sub>g</sub>/L<sub>g</sub> 頻譜比法</h3>
+                        <span class="font-mono text-xs px-2 py-0.5 rounded bg-slate/10 text-slate font-bold">g = Granitic（花崗岩質大陸地殼）</span>
+                    </div>
+                    <p class="text-xs text-muted">
+                        <strong>P<sub>g</sub></strong> 是沿花崗岩大陸地殼直接傳播的壓縮波（第一聲巨響）；<strong>L<sub>g</sub></strong> 則是被困在花崗岩地殼與莫荷面（Moho）之間、多重全反射疊加的剪力波導（波速約 3.5 km/s，觀測距離 120–2000 km，如同地殼回音）。只要在<strong>高頻段（&gt;5 Hz）計算 log(P<sub>g</sub>/L<sub>g</sub>)</strong>，數值高高在上的就是爆炸，貼近或低於 0 的就是天然地震！
+                    </p>
+                </div>
+
+                <!-- 花崗岩地殼導波圖 + 高頻頻譜比互動模擬器 -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                    <div class="lg:col-span-5 bg-paper rounded-xl border border-[#DFD9CE] p-3 space-y-2">
+                        <svg viewBox="0 0 360 185" class="w-full h-auto">
+                            <line x1="15" y1="30" x2="345" y2="30" stroke="#222120" stroke-width="2"/>
+                            <text x="18" y="21" font-size="10" font-weight="bold" fill="#5E5A54" font-family="serif">地表 (Surface)</text>
+                            <rect x="15" y="30" width="330" height="92" fill="#EAE5DC" opacity="0.6"/>
+                            <text x="175" y="48" text-anchor="middle" font-size="10" fill="#5E5A54" font-family="serif">花崗岩質大陸地殼 (Granitic Crust)</text>
+                            <line x1="15" y1="122" x2="345" y2="122" stroke="#9E5840" stroke-width="2" stroke-dasharray="5,3"/>
+                            <text x="262" y="135" font-size="9.5" font-weight="bold" fill="#9E5840" font-family="monospace">MOHO 莫荷面</text>
+                            <rect x="15" y="122" width="330" height="46" fill="#DFD9CE" opacity="0.5"/>
+                            <text x="180" y="154" text-anchor="middle" font-size="10" fill="#5E5A54" font-family="serif">上部地函 (Upper Mantle)</text>
+                            <circle cx="42" cy="56" r="5" fill="#9E5840"/>
+                            <text x="28" y="74" font-size="9.5" font-weight="bold" fill="#9E5840" font-family="serif">震源</text>
+                            <path d="M 42 56 Q 175 60 312 30" fill="none" stroke="#9E5840" stroke-width="2"/>
+                            <text x="160" y="74" font-size="10" font-weight="bold" fill="#9E5840" font-family="monospace">Pg (直接壓縮波)</text>
+                            <polyline points="42,56 88,122 135,30 182,122 228,30 272,122 312,30" fill="none" stroke="#3D5666" stroke-width="2"/>
+                            <rect x="82" y="101" width="212" height="16" rx="3" fill="#F9F7F3" opacity="0.9"/>
+                            <text x="188" y="112" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#3D5666" font-family="monospace">Lg (地殼多重反射導波 ~3.5 km/s)</text>
+                            <polygon points="312,19 304,30 320,30" fill="#222120"/>
+                            <text x="324" y="26" font-size="10" font-weight="bold" fill="#222120" font-family="serif">測站</text>
+                        </svg>
+                        <div class="text-[11px] text-muted px-1">
+                            計算步驟：濾波 &rarr; 框選時間窗 &rarr; <strong>50% 重疊</strong>平均算頻譜 &rarr; 算高頻比值。
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 bg-paper rounded-xl border border-[#DFD9CE] p-3 space-y-2">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-1.5 text-xs">
+                                <button onclick="setExpEvent('exp')" id="btn-event-exp" class="px-2.5 py-1 rounded bg-terracotta text-white font-bold">地下核試爆</button>
+                                <button onclick="setExpEvent('eq')" id="btn-event-eq" class="px-2.5 py-1 rounded bg-card border border-[#DFD9CE] text-ink">天然地震</button>
+                            </div>
+                            <div class="flex items-center gap-3 text-[11px] font-mono">
+                                <span class="text-terracotta font-bold">&mdash; Pg</span>
+                                <span class="text-slate font-bold">&mdash; Lg</span>
+                                <span class="text-ink font-bold">-- Noise</span>
+                            </div>
+                        </div>
+                        <canvas id="specCanvas" class="w-full h-44 block"></canvas>
+                        <div class="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs">
+                            <div class="flex items-center gap-2 flex-1 min-w-[200px]">
+                                <span class="text-muted shrink-0">測站距離：</span>
+                                <input type="range" id="dist-range" min="463" max="3019" step="10" value="463" oninput="updateExpLab()" class="flex-1">
+                                <span id="dist-val" class="font-mono font-bold text-terracotta shrink-0">463 km</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-muted">log(P<sub>g</sub>/L<sub>g</sub>)：</span>
+                                <span id="ratio-val" class="font-mono font-bold text-terracotta">+0.72</span>
+                                <span id="ratio-badge" class="px-2 py-0.5 rounded bg-terracotta/15 text-terracotta font-bold">地下爆炸</span>
+                            </div>
+                        </div>
+                        <p id="ratio-desc" class="text-[11px] text-muted">淺藍色區代表訊號大於環境雜訊（有效頻率範圍）；若距離過遠掉進黑線雜訊中，該段數據即作廢。</p>
+                    </div>
+                </div>
+
+                <!-- 收納式補充：S 波 / Lg 波 / 表面波總表 & 20s 雷利波地形效應 -->
+                <details class="editorial-inset rounded-xl p-3.5 text-xs group">
+                    <summary class="font-serif font-bold text-ink cursor-pointer flex items-center justify-between">
+                        <span>展開檢視：S 波 vs. L<sub>g</sub> 波 vs. 表面波完整比較總表 ＆ 20s 雷利波日本海散焦/聚焦觀測</span>
+                        <span class="font-mono text-slate group-open:rotate-180 transition-transform">&#9662;</span>
+                    </summary>
+                    <div class="pt-3 mt-2.5 border-t border-[#DFD9CE] space-y-3">
+                        <div class="overflow-x-auto rounded-lg border border-[#DFD9CE] bg-card">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-paper border-b border-[#DFD9CE] font-serif">
+                                        <th class="p-2">比較項目</th><th class="p-2">S 波（剪切波）</th><th class="p-2 text-slate">L<sub>g</sub> 波（大陸地殼導波）</th><th class="p-2">表面波（洛夫波・雷利波）</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-[#DFD9CE]">
+                                    <tr><td class="p-2 font-bold">波的分類</td><td class="p-2">體波</td><td class="p-2 font-bold text-slate">地殼導波</td><td class="p-2">表面波</td></tr>
+                                    <tr><td class="p-2 font-bold">傳播範圍</td><td class="p-2">地球內部固體層</td><td class="p-2">整個大陸地殼層內</td><td class="p-2">僅限地表與地殼極淺層</td></tr>
+                                    <tr><td class="p-2 font-bold">形成機制</td><td class="p-2">震源直接產生的原始剪力波</td><td class="p-2">多重反射 S 波在大陸地殼干涉疊加</td><td class="p-2">P 波與 S 波在地表附近耦合形成</td></tr>
+                                    <tr><td class="p-2 font-bold">典型速度</td><td class="p-2 font-mono">3.5–4.5 km/s（隨深度增）</td><td class="p-2 font-mono font-bold text-slate">約 3.5 km/s（日本 2.8–3.5｜中國 3.0–3.6）</td><td class="p-2 font-mono">2.5–3.5 km/s（通常最慢）</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-muted">
+                            <strong class="text-ink">表面波振幅衰減與構造不均質性（筆記 P.4）：</strong>以高斯濾波（T<sub>c</sub> = 20 s, 群速 U &approx; 3.35 km/s）檢視 2017 北韓核試雷利波封包曲線，發現傳經日本海<strong>高速異常區會「散焦（振幅變小）」</strong>，傳經<strong>低速異常區會「聚焦（振幅放大）」</strong>。
+                        </p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- ==================== STEP 03: 資料清洗與前處理 ==================== -->
+        <section id="step3" class="story-line space-y-6">
+            <span class="story-dot bg-sandgold"></span>
+            <div class="space-y-1">
+                <div class="font-mono text-xs text-sandgold font-bold">STEP 03｜承上啟下：確認是爆炸後，先清洗數據才能算威力</div>
+                <h2 class="font-serif text-xl sm:text-2xl font-bold text-ink">第三步：扣除儀器響應、檢驗 SNR 與高斯濾波，還原真實地面振動</h2>
+                <p class="text-xs sm:text-sm text-muted">
+                    既然第二步已經抓出「這是人為爆炸」，接著我們要問：<strong>「爆炸威力到底有多大？」</strong>這需要量測地面實際的最大振動速度（PGV）。但地震儀存下來的原始數位訊號（count）混雜了儀器硬體偏差與環境雜訊，必須先經過以下三道清洗手續：
+                </p>
+            </div>
+
+            <!-- 1. 去儀器響應 -->
+            <div class="editorial-card p-5 rounded-2xl space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h3 class="font-serif text-base font-bold text-ink">清洗手續 ①：去除儀器響應 I(ω)，還原真實地動速度 u(ω)</h3>
+                    <span class="text-xs text-muted">點擊公式各項查看物理意義</span>
+                </div>
+                <div class="bg-paper p-3.5 rounded-xl border border-[#DFD9CE] text-center overflow-x-auto">
+                    <div class="inline-flex items-center gap-1.5 sm:gap-2 font-mono text-base sm:text-lg font-bold text-ink">
+                        <button onclick="selectEquationTerm('z')" id="term-z" class="px-2.5 py-1 rounded bg-terracotta text-white">z(ω)</button>
+                        <span>=</span>
+                        <button onclick="selectEquationTerm('s')" id="term-s" class="px-2.5 py-1 rounded hover:bg-card">s(ω)</button>
+                        <span>&middot;</span>
+                        <button onclick="selectEquationTerm('E')" id="term-E" class="px-2.5 py-1 rounded hover:bg-card">E(ω)</button>
+                        <span>&middot;</span>
+                        <button onclick="selectEquationTerm('a')" id="term-a" class="px-2.5 py-1 rounded hover:bg-card">a(ω)</button>
+                        <span>&middot;</span>
+                        <button onclick="selectEquationTerm('I')" id="term-I" class="px-2.5 py-1 rounded hover:bg-card">I(ω)</button>
+                        <span>=</span>
+                        <button onclick="selectEquationTerm('u')" id="term-u" class="px-2.5 py-1 rounded hover:bg-card">u(ω)</button>
+                        <span>&middot;</span>
+                        <span class="text-muted">I(ω)</span>
+                    </div>
+                </div>
+                <div id="eq-term-detail" class="editorial-inset p-3.5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                    <div>
+                        <span id="eq-term-title" class="font-serif font-bold text-terracotta">z(ω) 原始數據：</span>
+                        <span id="eq-term-body" class="text-ink">地震儀最終存下來的原始數位訊號（count），除以儀器響應 I(ω) 即可還原地面真實振動速度 u(ω)（單位 m/s）。</span>
+                    </div>
+                    <span id="eq-term-unit" class="font-mono px-2 py-0.5 rounded bg-card border border-[#DFD9CE] text-muted shrink-0">單位：count</span>
+                </div>
+            </div>
+
+            <!-- 2. SNR 檢驗 與 3. 高斯濾波 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="editorial-card p-4 sm:p-5 rounded-2xl space-y-2.5">
+                    <h3 class="font-serif text-base font-bold text-ink">清洗手續 ②：訊噪比（SNR）與 P−1 秒緩衝區</h3>
+                    <p class="text-xs text-muted">計算「綠色訊號區 &divide; 灰色雜訊區」能量比（SNR &lt; 2 或 3 則淘汰）。雜訊窗刻意只取到波抵達前 1 秒（P−1s），避免人工標記誤差把波頭算進雜訊裡。</p>
+                    <div class="bg-paper rounded-xl border border-[#DFD9CE] p-2">
+                        <svg viewBox="0 0 360 118" class="w-full h-auto">
+                            <rect x="20" y="24" width="110" height="64" fill="#DFD9CE" opacity="0.75"/>
+                            <text x="75" y="16" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#5E5A54" font-family="serif">雜訊窗 (Noise)</text>
+                            <text x="75" y="104" text-anchor="middle" font-size="9" fill="#5E5A54" font-family="monospace">[P-6s ~ P-1s]</text>
+                            <rect x="130" y="24" width="28" height="64" fill="#9E7E43" opacity="0.22"/>
+                            <text x="144" y="104" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#9E7E43" font-family="monospace">緩衝1s</text>
+                            <line x1="158" y1="20" x2="158" y2="90" stroke="#9E5840" stroke-width="1.8" stroke-dasharray="3,2"/>
+                            <text x="158" y="16" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#9E5840" font-family="monospace">P/T1抵達</text>
+                            <rect x="158" y="24" width="132" height="64" fill="#4A6356" opacity="0.16"/>
+                            <text x="235" y="16" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#4A6356" font-family="serif">訊號窗 (Signal)</text>
+                            <text x="224" y="104" text-anchor="middle" font-size="9" fill="#4A6356" font-family="monospace">[P ~ P+4s / T1+5s]</text>
+                            <polyline points="15,56 45,54 70,58 95,55 120,57 144,55 158,56 168,32 180,80 194,36 210,72 228,44 250,62 285,54 345,56" fill="none" stroke="#222120" stroke-width="1.6"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="editorial-card p-4 sm:p-5 rounded-2xl space-y-2.5">
+                    <h3 class="font-serif text-base font-bold text-ink">清洗手續 ③：主頻高斯濾波器（Gaussian Filter）</h3>
+                    <p class="text-xs text-muted">以中心頻率 f<sub>0</sub>（如 3.5 Hz 或 5 Hz）為鐘形平滑篩子，讓離 f<sub>0</sub> 越遠的頻率平滑衰減，避免傳統方波陡切在波形前後產生多餘的假波紋（Ringing）。</p>
+                    <div class="grid grid-cols-2 gap-2 bg-paper rounded-xl border border-[#DFD9CE] p-2">
+                        <div>
+                            <div class="text-[10px] font-bold text-terracotta text-center mb-1">傳統方波（產生多餘假波紋）</div>
+                            <svg viewBox="0 0 160 72" class="w-full h-14">
+                                <line x1="10" y1="42" x2="150" y2="42" stroke="#C8C0B2" stroke-width="1"/>
+                                <path d="M 12 42 Q 25 35, 38 42 T 62 42 Q 80 10, 98 42 T 122 42 Q 135 49, 148 42" fill="none" stroke="#9E5840" stroke-width="1.6"/>
+                                <text x="35" y="64" font-size="8.5" fill="#9E5840" font-family="serif">濾波前多餘波紋</text>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-[10px] font-bold text-sage text-center mb-1">高斯鐘形（乾淨平滑波包）</div>
+                            <svg viewBox="0 0 160 72" class="w-full h-14">
+                                <line x1="10" y1="42" x2="150" y2="42" stroke="#C8C0B2" stroke-width="1"/>
+                                <path d="M 12 42 L 55 42 Q 80 10, 105 42 L 148 42" fill="none" stroke="#4A6356" stroke-width="2"/>
+                                <text x="80" y="64" text-anchor="middle" font-size="8.5" fill="#4A6356" font-family="serif">平滑過渡・無假波紋</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== STEP 04: PGV 衰減關係與高雄氣爆規模反推 ==================== -->
+        <section id="step4" class="story-line space-y-6">
+            <span class="story-dot bg-sage"></span>
+            <div class="space-y-1">
+                <div class="font-mono text-xs text-sage font-bold">STEP 04｜最終破案：量出真實 PGV &rarr; 代入衰減式 &rarr; 反推事件規模 M<sub>L</sub></div>
+                <h2 class="font-serif text-xl sm:text-2xl font-bold text-ink">第四步：從「最大地動速度（PGV）」反推爆炸威力與 2014 高雄氣爆規模</h2>
+                <p class="text-xs sm:text-sm text-muted">
+                    經過第三步清洗後，我們終於能從乾淨的真實速度波形中量出峰值——也就是 <strong>PGV（Peak Ground Velocity，最大地動速度）</strong>。因為爆炸沒有斷層錯動面積可量，我們正是透過<strong>「PGV 隨距離 X 衰減的經驗公式」</strong>，把測站量到的真實 PGV 換算回震源的<strong>區域規模（M<sub>L</sub>）</strong>！
+                </p>
+            </div>
+
+            <!-- 正向預測 & 逆向反推公式雙欄卡片 -->
+            <div class="editorial-card p-5 rounded-2xl space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div class="editorial-inset p-4 rounded-xl space-y-1.5">
+                        <div class="font-mono font-bold text-sage">① 正向衰減關係式（已知規模 M，預測距離 X 的 PGV）</div>
+                        <div class="font-mono text-sm font-bold text-ink bg-card px-3 py-2 rounded border border-[#DFD9CE]">
+                            log(PGV) = a&middot;log(X) + b&middot;X + c&middot;M<sub>L</sub> + d
+                        </div>
+                        <p class="text-muted">利用台灣 <strong>TAIGER 岩盤炸測實驗</strong>（已知炸藥量），反演出近地表爆炸專用係數：<strong>a = &minus;1.41, c = 1.16, d = &minus;6.63</strong>（斜率比 1999 集集地震天然地震衰減式更陡）。</p>
+                    </div>
+                    <div class="editorial-inset p-4 rounded-xl space-y-1.5 border-terracotta/40">
+                        <div class="font-mono font-bold text-terracotta">② 移項反推規模公式（量出真實 PGV &rarr; 算出 M<sub>L</sub>）</div>
+                        <div class="font-mono text-sm font-bold text-terracotta bg-card px-3 py-2 rounded border border-terracotta/30">
+                            M<sub>L</sub> = [ log(PGV) &minus; a&middot;log(X) &minus; b&middot;X &minus; d ] / c
+                        </div>
+                        <p class="text-muted">遇到未知威力的事件時，只要代入各測站的距離 X 與真實 PGV，即可反推出事件規模——本研究藉此成功推估 <strong>2014 高雄氣爆規模為 M<sub>L</sub> = 2.38</strong>！</p>
+                    </div>
+                </div>
+
+                <!-- 互動模擬曲線 -->
+                <div class="space-y-3 pt-2">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 class="font-serif text-base font-bold text-ink">互動模擬：近地表爆炸 vs. 天然地震 PGV 距離衰減曲線</h3>
+                        <button onclick="loadKaohsiungEvent()" class="px-3 py-1.5 rounded-xl bg-terracotta text-white font-serif font-bold text-xs shadow-sm hover:opacity-90">
+                            一鍵載入 2014 高雄氣爆（M<sub>L</sub> = 2.38）
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-paper p-3.5 rounded-xl border border-[#DFD9CE] text-xs">
+                        <div>
+                            <div class="flex justify-between font-medium mb-1">
+                                <span>事件規模（M<sub>L</sub>）</span>
+                                <span id="pgv-m-val" class="font-mono font-bold text-terracotta">2.38</span>
+                            </div>
+                            <input type="range" id="pgv-m-range" min="1.0" max="4.5" step="0.02" value="2.38" oninput="updatePgvChart()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between font-medium mb-1">
+                                <span>最大觀測距離（X）</span>
+                                <span id="pgv-x-val" class="font-mono font-bold text-slate">100 km</span>
+                            </div>
+                            <input type="range" id="pgv-x-range" min="20" max="150" step="5" value="100" oninput="updatePgvChart()">
+                        </div>
+                    </div>
+
+                    <div class="bg-paper rounded-xl border border-[#DFD9CE] p-3 space-y-1.5">
+                        <div class="flex flex-wrap items-center justify-end gap-4 px-2 text-[11px] font-mono">
+                            <span class="flex items-center gap-1.5 text-terracotta font-bold"><span class="w-4 h-0.5 bg-terracotta inline-block"></span>近地表爆炸 (TAIGER 岩盤衰減較快)</span>
+                            <span class="flex items-center gap-1.5 text-slate font-bold"><span class="w-4 border-t-2 border-dashed border-slate inline-block"></span>天然地震衰減曲線</span>
+                        </div>
+                        <canvas id="pgvCanvas" class="w-full h-48 block"></canvas>
+                    </div>
+                </div>
+
+                <!-- 收納式補充細節：將繁雜的五大因素、四個衰減原因與 TAIGER 測線細節整齊收納，隨點隨看 -->
+                <details class="editorial-inset rounded-xl p-3.5 text-xs group">
+                    <summary class="font-serif font-bold text-ink cursor-pointer flex items-center justify-between">
+                        <span>展開檢視：為何近地表爆炸衰減更快？＆ 影響爆炸能量轉換的五大因素・TAIGER 測線細節</span>
+                        <span class="font-mono text-sage group-open:rotate-180 transition-transform">&#9662;</span>
+                    </summary>
+                    <div class="pt-3 mt-2.5 border-t border-[#DFD9CE] space-y-3 text-muted">
+                        <div>
+                            <strong class="text-ink">一、為什麼近地表爆炸的 PGV 隨距離衰減比深層天然地震快得多？</strong>
+                            <ul class="list-disc pl-4 mt-1 space-y-0.5">
+                                <li><strong>極淺層鬆軟介質吸收：</strong>近地表爆炸波沿風化層與土壤傳播，孔隙介質非彈性耗散極強（深層天然地震則走緻密高 Q 值岩層）。</li>
+                                <li><strong>高頻能量易散射：</strong>爆炸集中於高頻波段（&gt;5 Hz），短波長極易被地表裂隙與地形起伏散射衰減。</li>
+                                <li><strong>多重潛波（Multiple Diving Waves）：</strong>極淺層陡峭速度梯度（1D Steep Velocity Gradient）使震波在淺部反覆折射彈跳（如 TAIGER 南北測線 V<sub>red</sub> = 5.5 km/s 與 CHY031 極淺層強震紀錄），每次反射都損失大量能量。</li>
+                                <li><strong>自由表面逸散：</strong>震源離地表極近，絕大部分能量直接衝出地表轉為光、熱、空氣聲波與圍岩破壞。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <strong class="text-ink">二、影響爆炸轉換為地震波能量的五大因素＆經驗公式對照：</strong><br>
+                            ① <strong>炸藥當量（Yield）</strong>：愈大能量愈強（如 N3 750 kg vs. N3P 3000 kg）；② <strong>爆炸深度</strong>：愈深轉換效能愈好；③ <strong>井孔回填覆蓋</strong>：TAIGER 鑽井下炸藥後覆蓋角礫石封孔；④ <strong>周遭介質特性</strong>：花崗岩、岩鹽傳導高，軟泥巴吸收能量；⑤ <strong>耦合程度</strong>：貼合愈緊實能量愈完整，有空隙則能量消耗於空隙。傳統天然地震式包含 Joyner &amp; Boore (1981)、Campbell (1981) 及 1999 集集地震 Liu &amp; Tsai (2005)。
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- ==================== STEP 05: 研究結論與聽講心得 ==================== -->
+        <section id="step5" class="story-line space-y-6 pb-10">
+            <span class="story-dot bg-ink"></span>
+            <div class="space-y-1">
+                <div class="font-mono text-xs text-ink font-bold">STEP 05｜故事收束：研究六大結論與聽講心得</div>
+                <h2 class="font-serif text-xl sm:text-2xl font-bold text-ink">第五步：總結與聽講心得</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                <div class="lg:col-span-8 editorial-card p-5 rounded-2xl space-y-2.5">
+                    <h3 class="font-serif text-base font-bold text-ink">演講研究六大核心結論</h3>
+                    <ol class="space-y-2 text-xs sm:text-sm text-ink list-decimal pl-5">
+                        <li>2017 年北韓核試驗產生之雷利波在相近距離下的振幅衰減呈現明顯空間差異，可歸因於日本海下方地下構造的不均質性（高速散焦、低速聚焦）。</li>
+                        <li>利用 TAIGER 計畫岩盤測站的地震波形資料，建立了首個適用於近地表爆炸事件之最大地動速度（PGV）衰減方程式。</li>
+                        <li>西部平原地區所觀測到的 PGV 衰減特性與岩盤測站所呈現的衰減型態有顯著差異。</li>
+                        <li>炸藥使用量與觀測所得區域規模（M<sub>L</sub>）的關係顯示各次爆破效率不同，推測與當地地質條件、耦合效果及實際引爆炸藥量有關。</li>
+                        <li>透過所建立的衰減公式，成功推估出 <strong>2014 年高雄氣爆事件</strong>所對應之區域規模為 <strong>M<sub>L</sub> = 2.38</strong>。</li>
+                        <li>發生於平原地區之近地表爆炸事件的衰減方程式，仍有待進一步建立。</li>
+                    </ol>
+                </div>
+
+                <div class="lg:col-span-4 editorial-card p-5 rounded-2xl flex flex-col justify-between bg-[#FBF8F1] border-sandgold/40">
+                    <div class="space-y-2.5">
+                        <div class="inline-block px-2.5 py-0.5 rounded bg-sandgold/15 text-sandgold font-serif font-bold text-xs">
+                            聽講心得
+                        </div>
+                        <blockquote class="font-wenkai text-base text-ink leading-loose">
+                            「大家好偉大，能從波形去分辨天然地震還是爆炸，讓我們能約束他國核試爆，也同時保障大家的安全。<br><br>
+                            這次的講座也讓我知道地震觀測要很小心，即時與準確性都很重要，不然飯碗可能不保。」
+                        </blockquote>
+                    </div>
+                    <div class="pt-3 mt-3 border-t border-[#DFD9CE] text-[11px] font-mono text-muted flex justify-between">
+                        <span>爆炸地震學與近地表震波衰減</span>
+                        <span>手札完</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // ==================== 高解析度 Canvas 輔助函式（解決高 DPI 螢幕模糊問題） ====================
+        function setupHiDPICanvas(canvas) {
+            const dpr = Math.max(window.devicePixelRatio || 1, 2);
+            const rect = canvas.getBoundingClientRect();
+            const width = rect.width || 600;
+            const height = rect.height || 208;
+            canvas.width = Math.round(width * dpr);
+            canvas.height = Math.round(height * dpr);
+            const ctx = canvas.getContext('2d');
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            return { ctx, w: width, h: height };
+        }
+
+        // ==================== 1. Z / R / T 三分量互動切換 ====================
+        function selectAxis(axis) {
+            ['Z', 'R', 'T'].forEach(a => {
+                const btn = document.getElementById('btn-axis-' + a);
+                const row = document.getElementById('row-axis-' + a);
+                const svgGroup = document.getElementById('svg-axis-' + a);
+                if (a === axis) {
+                    btn.className = 'px-3 py-1.5 rounded-lg bg-terracotta text-white font-semibold transition-all';
+                    row.className = 'bg-terracotta/10 transition-colors';
+                    svgGroup.setAttribute('opacity', '1');
+                } else {
+                    btn.className = 'px-3 py-1.5 rounded-lg bg-paper border border-[#DFD9CE] text-ink hover:bg-cardhover transition-all';
+                    row.className = 'transition-colors';
+                    svgGroup.setAttribute('opacity', '0.45');
+                }
+            });
+
+            const insight = document.getElementById('axis-insight-box');
+            if (axis === 'Z') {
+                insight.innerHTML = '<span class="font-bold text-terracotta">Z 垂直向重點：</span>垂直於地表面（上下振動），主要收錄 <strong>P 波、SV 波與雷利波（Rayleigh wave）</strong>。地下核試爆因為向外壓縮推擠，Z 軸的 P 波初動通常極為強烈且向上。';
+            } else if (axis === 'R') {
+                insight.innerHTML = '<span class="font-bold text-sage">R 徑向重點：</span>沿著「震央到測站」的連線方向（水平前後推拉），同樣收錄 <strong>P 波、SV 波與雷利波（Rayleigh wave）</strong>。';
+            } else {
+                insight.innerHTML = '<span class="font-bold text-slate">T 切向重點：</span>水平面上垂直於徑向的方向（水平左右搖晃），專門分離出純水平剪力運動的 <strong>SH 波與洛夫波（Love wave）</strong>。核試爆缺乏剪力錯動，因此 T 分量訊號通常異常微弱！';
+            }
+        }
+
+        // ==================== 2. Pg / Lg 頻譜比法與噪訊模擬器 ====================
+        let expEventType = 'exp';
+        const specCanvas = document.getElementById('specCanvas');
+
+        function setExpEvent(type) {
+            expEventType = type;
+            document.getElementById('btn-event-exp').className = type === 'exp'
+                ? 'px-3 py-1 rounded-md bg-terracotta text-white font-bold transition-all'
+                : 'px-3 py-1 rounded-md text-ink hover:bg-cardhover transition-all';
+            document.getElementById('btn-event-eq').className = type === 'eq'
+                ? 'px-3 py-1 rounded-md bg-sage text-white font-bold transition-all'
+                : 'px-3 py-1 rounded-md text-ink hover:bg-cardhover transition-all';
+            updateExpLab();
+        }
+
+        function updateExpLab() {
+            const dist = parseFloat(document.getElementById('dist-range').value);
+            document.getElementById('dist-val').innerText = dist + ' km';
+            drawSpectrum(dist);
+        }
+
+        function drawSpectrum(dist) {
+            const { ctx: specCtx, w, h } = setupHiDPICanvas(specCanvas);
+            specCtx.clearRect(0, 0, w, h);
+
+            const padL = 36, padR = 24, padT = 14, padB = 26;
+            const plotW = w - padL - padR;
+            const noiseY = h - padB - Math.min(135, 45 + (dist - 463) * 0.034);
+
+            // 淺藍色底色：訊號大於雜訊有效區
+            specCtx.fillStyle = 'rgba(61, 86, 102, 0.08)';
+            specCtx.fillRect(padL, padT, plotW, Math.max(0, noiseY - padT));
+
+            // 座標外框線
+            specCtx.strokeStyle = '#DFD9CE';
+            specCtx.lineWidth = 1;
+            specCtx.strokeRect(padL, padT, plotW, h - padT - padB);
+
+            // 雜訊線 (Noise)
+            specCtx.beginPath();
+            specCtx.strokeStyle = '#222120';
+            specCtx.lineWidth = 1.6;
+            specCtx.setLineDash([4, 3]);
+            for (let x = padL; x <= padL + plotW; x += 4) {
+                let ny = noiseY + Math.sin(x * 0.14) * 3;
+                if (x === padL) specCtx.moveTo(x, ny);
+                else specCtx.lineTo(x, ny);
+            }
+            specCtx.stroke();
+            specCtx.setLineDash([]);
+
+            // 5 Hz 高頻判別基準線
+            const x5Hz = padL + (5.0 - 0.1) / 9.9 * plotW;
+            specCtx.beginPath();
+            specCtx.strokeStyle = 'rgba(158, 126, 67, 0.65)';
+            specCtx.lineWidth = 1.2;
+            specCtx.moveTo(x5Hz, padT);
+            specCtx.lineTo(x5Hz, h - padB);
+            specCtx.stroke();
+
+            // Pg 曲線
+            specCtx.beginPath();
+            specCtx.strokeStyle = '#9E5840';
+            specCtx.lineWidth = 2.4;
+            for (let x = padL; x <= padL + plotW; x++) {
+                let freq = 0.1 + (x - padL) / plotW * 9.9;
+                let distAtten = ((dist - 463) / 400) * (1.6 + freq * 0.98);
+                let pgAmp = (expEventType === 'exp')
+                    ? (162 - freq * 3.3 - distAtten)
+                    : (122 - freq * 6.8 - distAtten);
+                let yPg = Math.min(h - padB - 2, Math.max(padT + 4, h - padB - pgAmp));
+                if (x === padL) specCtx.moveTo(x, yPg);
+                else specCtx.lineTo(x, yPg);
+            }
+            specCtx.stroke();
+
+            // Lg 曲線
+            specCtx.beginPath();
+            specCtx.strokeStyle = '#3D5666';
+            specCtx.lineWidth = 2.4;
+            for (let x = padL; x <= padL + plotW; x++) {
+                let freq = 0.1 + (x - padL) / plotW * 9.9;
+                let distAtten = ((dist - 463) / 400) * (1.6 + freq * 1.12);
+                let lgAmp = (expEventType === 'exp')
+                    ? (118 - freq * 10.2 - distAtten)
+                    : (160 - freq * 4.7 - distAtten);
+                let yLg = Math.min(h - padB - 2, Math.max(padT + 4, h - padB - lgAmp));
+                if (x === padL) specCtx.moveTo(x, yLg);
+                else specCtx.lineTo(x, yLg);
+            }
+            specCtx.stroke();
+
+            // 清晰高對比刻度文字
+            specCtx.fillStyle = '#3A3734';
+            specCtx.font = '500 11px "IBM Plex Mono", sans-serif';
+            specCtx.fillText('0.1 Hz', padL, h - 8);
+            specCtx.fillText('5.0 Hz (高頻判別線)', x5Hz - 52, h - 8);
+            specCtx.fillText('10.0 Hz', padL + plotW - 44, h - 8);
+
+            const ratioElem = document.getElementById('ratio-val');
+            const badgeElem = document.getElementById('ratio-badge');
+            const descElem = document.getElementById('ratio-desc');
+
+            let logRatio = (expEventType === 'exp') ? 0.72 : -0.34;
+            ratioElem.innerText = (logRatio >= 0 ? '+' : '') + logRatio.toFixed(2);
+
+            if (expEventType === 'exp') {
+                ratioElem.className = 'font-mono text-xl font-bold text-terracotta';
+                badgeElem.className = 'px-2.5 py-1 rounded bg-terracotta/15 text-terracotta font-serif font-bold text-xs text-center';
+                badgeElem.innerText = '判讀結果：地下爆炸事件';
+                descElem.innerText = '高頻段（5 Hz 以上）Pg 能量遠高於 Lg，數值高高在上即為爆炸；掉在下面貼近或低於 0 則為天然地震（Taylor, 1996；Kim et al., 2007）。';
+            } else {
+                ratioElem.className = 'font-mono text-xl font-bold text-sage';
+                badgeElem.className = 'px-2.5 py-1 rounded bg-sage/15 text-sage font-serif font-bold text-xs text-center';
+                badgeElem.innerText = '判讀結果：天然斷層地震';
+                descElem.innerText = '斷層錯動產生豐富剪力波，Lg 地殼導波能量強勁，高頻比值貼近或低於 0。';
+            }
+        }
+        updateExpLab();
+
+        // ==================== 3. 去儀器響應公式互動 ====================
+        const eqData = {
+            'z': { title: 'z(ω) 原始數據：', unit: '單位：count（類比轉數位計數值）', desc: '地震儀最終存下來的原始數位訊號，扣除硬體靈敏度與濾波特性 I(ω) 後還原真實地動速度 u(ω)。' },
+            's': { title: 's(ω) 震源項：', unit: '單位：N·m', desc: '地震或核試爆當下釋放的真實能量與輻射型態。' },
+            'E': { title: 'E(ω) 路徑效應：', unit: '無因次衰減因子', desc: '地震波穿過地殼與地函時的傳播幾何擴散與吸收衰減。' },
+            'a': { title: 'a(ω) 場址效應：', unit: '無因次放大因子', desc: '測站下方局部地質（如軟土層或堅硬岩盤）對震動的放大或縮小。' },
+            'I': { title: 'I(ω) 儀器響應：', unit: 'count / (m/s)', desc: '感測器與記錄器本身的靈敏度與濾波特性（硬體偏差），還原真實地動前須扣除。' },
+            'u': { title: 'u(ω) 真實地動速度：', unit: '單位：m/s', desc: '把前面三項（s·E·a）合起來，就是地面實際發生的物理震動速度。' }
+        };
+
+        function selectEquationTerm(key) {
+            const data = eqData[key];
+            if (!data) return;
+            ['z', 's', 'E', 'a', 'I', 'u'].forEach(k => {
+                const btn = document.getElementById('term-' + k);
+                if (btn) btn.className = 'px-2.5 py-1 rounded hover:bg-card transition-all';
+            });
+            const active = document.getElementById('term-' + key);
+            if (active) active.className = 'px-2.5 py-1 rounded bg-terracotta text-white font-bold transition-all';
+
+            document.getElementById('eq-term-title').innerText = data.title;
+            document.getElementById('eq-term-unit').innerText = data.unit;
+            document.getElementById('eq-term-body').innerText = data.desc;
+        }
+
+        // ==================== 4. TAIGER PGV 衰減模型模擬器 ====================
+        const pgvCanvas = document.getElementById('pgvCanvas');
+
+        function loadKaohsiungEvent() {
+            document.getElementById('pgv-m-range').value = 2.38;
+            document.getElementById('pgv-x-range').value = 100;
+            updatePgvChart();
+        }
+
+        function updatePgvChart() {
+            const M = parseFloat(document.getElementById('pgv-m-range').value);
+            const maxX = parseFloat(document.getElementById('pgv-x-range').value);
+            document.getElementById('pgv-m-val').innerText = M.toFixed(2);
+            document.getElementById('pgv-x-val').innerText = maxX + ' km';
+            drawPgvChart(M, maxX);
+        }
+
+        function drawPgvChart(M, maxX) {
+            const { ctx: pgvCtx, w, h } = setupHiDPICanvas(pgvCanvas);
+            pgvCtx.clearRect(0, 0, w, h);
+
+            const padL = 56, padR = 24, padT = 14, padB = 28;
+            const plotW = w - padL - padR;
+            const plotH = h - padT - padB;
+
+            // 外框與網格
+            pgvCtx.strokeStyle = '#DFD9CE';
+            pgvCtx.lineWidth = 1;
+            pgvCtx.strokeRect(padL, padT, plotW, plotH);
+
+            for (let i = 1; i < 4; i++) {
+                let y = padT + (plotH / 4) * i;
+                pgvCtx.beginPath();
+                pgvCtx.moveTo(padL, y);
+                pgvCtx.lineTo(padL + plotW, y);
+                pgvCtx.stroke();
+            }
+
+            // 近地表爆炸衰減曲線 (TAIGER 岩盤)
+            pgvCtx.beginPath();
+            pgvCtx.strokeStyle = '#9E5840';
+            pgvCtx.lineWidth = 2.6;
+            for (let px = 0; px <= plotW; px += 2) {
+                let dist = 1 + (px / plotW) * (maxX - 1);
+                let logPgv = -1.41 * Math.log10(dist) - 0.0015 * dist + 1.16 * M - 3.6;
+                let py = padT + plotH - ((logPgv + 3.2) / 5.2) * plotH;
+                py = Math.max(padT + 2, Math.min(padT + plotH - 2, py));
+                if (px === 0) pgvCtx.moveTo(padL + px, py);
+                else pgvCtx.lineTo(padL + px, py);
+            }
+            pgvCtx.stroke();
+
+            // 天然地震衰減曲線
+            pgvCtx.beginPath();
+            pgvCtx.strokeStyle = '#3D5666';
+            pgvCtx.lineWidth = 2.2;
+            pgvCtx.setLineDash([5, 4]);
+            for (let px = 0; px <= plotW; px += 2) {
+                let dist = 1 + (px / plotW) * (maxX - 1);
+                let logPgvEq = -1.08 * Math.log10(dist) - 0.0008 * dist + 0.98 * M - 2.9;
+                let py = padT + plotH - ((logPgvEq + 3.2) / 5.2) * plotH;
+                py = Math.max(padT + 2, Math.min(padT + plotH - 2, py));
+                if (px === 0) pgvCtx.moveTo(padL + px, py);
+                else pgvCtx.lineTo(padL + px, py);
+            }
+            pgvCtx.stroke();
+            pgvCtx.setLineDash([]);
+
+            // 清晰高對比座標標籤
+            pgvCtx.fillStyle = '#3A3734';
+            pgvCtx.font = '500 11px "IBM Plex Mono", sans-serif';
+            pgvCtx.fillText('1 km', padL, h - 8);
+            pgvCtx.fillText(Math.round(maxX / 2) + ' km', padL + plotW / 2 - 18, h - 8);
+            pgvCtx.fillText(maxX + ' km', padL + plotW - 38, h - 8);
+            pgvCtx.fillText('log PGV', 6, padT + 14);
+            pgvCtx.fillText('(cm/s)', 8, padT + 28);
+        }
+
+        window.addEventListener('resize', () => {
+            updateExpLab();
+            updatePgvChart();
+        });
+        updatePgvChart();
+    </script>
+</body>
+</html>
